@@ -22,7 +22,16 @@ const TaskList = styled.div`
   flex-grow: 1
   min-height: 100px
 `
-
+class InnerList extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return nextProps.tasks !== this.props.tasks
+  }
+  render() {
+    return this.props.tasks.map((task, index) => (
+      <Task key={task.id} task={task} index={index} />
+    ))
+  }
+}
 export default class Column extends React.Component {
   render() {
     return (
@@ -43,9 +52,7 @@ export default class Column extends React.Component {
                   {...provided.droppableProps}
                   isDraggingOver={snapshot.isDraggingOver}
                 >
-                  {this.props.tasks.map((task, index) => (
-                    <Task key={task.id} task={task} index={index} />
-                  ))}
+                  <InnerList tasks={this.props.tasks} />
                   {provided.placeholder}
                 </TaskList>
               )}

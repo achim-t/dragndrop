@@ -9,6 +9,20 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
 `
+class InnerList extends React.PureComponent {
+  render() {
+    const { column, taskMap, index, isDropDisabled } = this.props
+    const tasks = column.taskIds.map(taskId => taskMap[taskId])
+    return (
+      <Column
+        column={column}
+        tasks={tasks}
+        index={index}
+        isDropDisabled={isDropDisabled}
+      />
+    )
+  }
+}
 
 class App extends React.Component {
   state = initialData
@@ -102,17 +116,17 @@ class App extends React.Component {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {this.state.columnOrder.map((columnId, index) => {
                 const column = this.state.columns[columnId]
-                const tasks = column.taskIds.map(
-                  taskId => this.state.tasks[taskId]
-                )
+                // const tasks = column.taskIds.map(
+                //   taskId => this.state.tasks[taskId]
+                // )
 
                 const isDropDisabled = index < this.state.homeIndex
 
                 return (
-                  <Column
+                  <InnerList
                     key={column.id}
                     column={column}
-                    tasks={tasks}
+                    taskMap={this.state.tasks}
                     isDropDisabled={isDropDisabled}
                     index={index}
                   />
